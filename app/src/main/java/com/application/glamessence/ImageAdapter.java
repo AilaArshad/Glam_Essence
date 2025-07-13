@@ -1,0 +1,92 @@
+package com.application.glamessence;
+
+import android.net.Uri;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.List;
+
+public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int TYPE_IMAGE = 1;
+    private static final int TYPE_ADD = 2;
+
+    private final List<Uri> imageUris;
+    private final OnImageActionListener listener;
+
+    public interface OnImageActionListener {
+        void onAddImageClicked();
+        void onDeleteImageClicked(int position);
+    }
+
+    public ImageAdapter(List<Uri> imageUris, OnImageActionListener listener) {
+        this.imageUris = imageUris;
+        this.listener = listener;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == imageUris.size() ? TYPE_ADD : TYPE_IMAGE;
+    }
+
+    @Override
+    public int getItemCount() {
+        return imageUris.size() + 1;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == TYPE_IMAGE) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.adding_img, parent, false);
+            return new ImageViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.adding_img_sign, parent, false);
+            return new AddViewHolder(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder.getItemViewType() == TYPE_IMAGE) {
+            ImageViewHolder imageHolder = (ImageViewHolder) holder;
+            imageHolder.bind(imageUris.get(position));
+        } else {
+            AddViewHolder addHolder = (AddViewHolder) holder;
+            addHolder.bind();
+        }
+    }
+
+    class ImageViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView, deleteButton;
+
+        public ImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imageView = itemView.findViewById(R.id.imageView);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
+        }
+
+        public void bind(Uri uri) {
+            imageView.setImageURI(uri);
+            deleteButton.setOnClickListener(v -> listener.onDeleteImageClicked(getAdapterPosition()));
+        }
+    }
+
+    class AddViewHolder extends RecyclerView.ViewHolder {
+        ImageView addImageBtn;
+
+        public AddViewHolder(@NonNull View itemView) {
+            super(itemView);
+            addImageBtn = itemView.findViewById(R.id.addImageBtn);
+        }
+
+        public void bind() {
+            addImageBtn.setOnClickListener(v -> listener.onAddImageClicked());
+        }
+    }
+}

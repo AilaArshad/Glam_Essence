@@ -2,4 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="selectedColor">#090909</color> <!-- Orange or any you like -->
+    <color name="unselectedColor">#DDDDDD</color> <!-- Grey for unselected -->
+
 </resources>

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "431950214282",
-    "project_id": "glam-essence",
-    "storage_bucket": "glam-essence.firebasestorage.app"
+    "project_number": "728566707244",
+    "project_id": "glamessence-45054",
+    "storage_bucket": "glamessence-45054.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:431950214282:android:b4543e52b5447902f5e973",
+        "mobilesdk_app_id": "1:728566707244:android:33986095a979588e660d89",
         "android_client_info": {
           "package_name": "com.application.glamessence"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCwm1jyLfwj8ShMuWWvS6WWMr27M94AP4w"
+          "current_key": "AIzaSyB0DiVLSnqPkFxFgshynTtpnRPLyLD_mpA"
         }
       ],
       "services": {

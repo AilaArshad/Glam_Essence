@@ -1,0 +1,15 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_marginEnd="12dp"
+    android:background="@drawable/doted_border"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/addImageBtn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/plus_add_product"/>
+</FrameLayout>
