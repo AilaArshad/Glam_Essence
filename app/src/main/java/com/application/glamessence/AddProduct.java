@@ -153,7 +153,7 @@ public class AddProduct extends Fragment {
                 .addOnSuccessListener(querySnapshot -> {
                     int nextId = querySnapshot.size() + 1;
                     productIdEditText.setText(String.valueOf(nextId));
-                    categoryEditText.setText("Makeup");
+                    categoryEditText.setText(categoryFromIntent);
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(requireContext(), "Failed to generate ID: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -371,11 +371,16 @@ public class AddProduct extends Fragment {
     }
 
     private void navigateToProductList() {
+        Fragment listFragment = new ListToChangeProductInfo();
+        Bundle bundle = new Bundle();
+        bundle.putString("category", categoryFromIntent);
+        listFragment.setArguments(bundle);
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frameLayout, new ListToChangeProductInfo())
+                .replace(R.id.frameLayout, listFragment)
                 .addToBackStack(null)
                 .commit();
+
     }
 
     private void addClickListener() {
