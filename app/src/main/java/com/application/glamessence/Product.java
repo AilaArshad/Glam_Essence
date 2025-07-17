@@ -1,5 +1,7 @@
 package com.application.glamessence;
+
 import java.util.List;
+
 public class Product {
     private String productId;
     private String category;
@@ -17,10 +19,13 @@ public class Product {
     private String brandDescription;
     private List<String> productImages;
 
+    private float rating;
+    private int ratingCount;
+
     public Product(String productId, String category, String productName, String productQuantity, String stock,
-                        String price, String description, String moreInfo, String ingredients, String howToUse,
-                        String shippingInfo, String brandName, String brandImageUri, String brandDescription,
-                        List<String> productImages) {
+                   String price, String description, String moreInfo, String ingredients, String howToUse,
+                   String shippingInfo, String brandName, String brandImageUri, String brandDescription,
+                   List<String> productImages, float rating, int ratingCount) {
 
         this.productId = productId;
         this.category = category;
@@ -37,6 +42,8 @@ public class Product {
         this.brandImageUri = brandImageUri;
         this.brandDescription = brandDescription;
         this.productImages = productImages;
+        this.rating = rating;
+        this.ratingCount = ratingCount;
     }
 
     public String getProductId() {
@@ -97,5 +104,13 @@ public class Product {
 
     public List<String> getProductImages() {
         return productImages;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
     }
 }

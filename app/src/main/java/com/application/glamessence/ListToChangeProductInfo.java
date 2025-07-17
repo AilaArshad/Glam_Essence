@@ -75,7 +75,9 @@ public class ListToChangeProductInfo extends Fragment {
                                 doc.getString("brandName"),
                                 doc.getString("brandImageUri"),
                                 doc.getString("brandDescription"),
-                                (List<String>) doc.get("productImages")
+                                (List<String>) doc.get("productImages"),
+                                0.0f,
+                                0
                         );
                         productList.add(product);
                     }

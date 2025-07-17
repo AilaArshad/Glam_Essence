@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new ProductDetail();
                 break;
             case "heart":
-                selectedFragment = new ListToChangeProductInfo(); // Or null for now
+                selectedFragment = new ProductList(); // Or null for now
                 break;
 //            case "person":
 //                selectedFragment = new ProfileFragment(); // Or null
