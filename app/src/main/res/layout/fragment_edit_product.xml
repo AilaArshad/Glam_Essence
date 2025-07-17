@@ -55,7 +55,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/circularProgress"
+                    android:id="@+id/circularProgressIndicator"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:indeterminate="false"
@@ -111,49 +111,19 @@
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
-            <HorizontalScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="12dp"
-                android:scrollbars="none">
+                android:orientation="vertical"
+                android:padding="12dp">
 
-                <LinearLayout
-                    android:id="@+id/imageContainer"
-                    android:layout_width="wrap_content"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewImages"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <FrameLayout
-                        android:id="@+id/addImageFrame"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginEnd="12dp"
-                        android:background="@drawable/doted_border"
-                        android:clickable="true"
-                        android:focusable="true">
-
-                        <ImageView
-                            android:id="@+id/addProductImageBtn"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="center"
-                            android:src="@drawable/plus_add_product"
-                            android:visibility="visible" />
-
-                        <ImageView
-                            android:id="@+id/deleteProductImageBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="top|end"
-                            android:padding="2dp"
-                            android:src="@drawable/cross_circle"
-                            android:visibility="gone" />
-                    </FrameLayout>
-
-                </LinearLayout>
-            </HorizontalScrollView>
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -176,7 +146,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productID"
+                android:id="@+id/productIdEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -199,7 +169,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productCategory"
+                android:id="@+id/categoryEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -222,7 +192,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productName"
+                android:id="@+id/productNameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -245,7 +215,30 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productQuantityEdit"
+                android:id="@+id/productQuantityEditText"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/product_edit_border"
+                android:inputType="number"
+                android:paddingStart="5dp"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:text="Product stock"
+                android:textColor="#8B8A8A"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/productStockEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -268,7 +261,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productPrice"
+                android:id="@+id/productPriceEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -291,7 +284,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productDescription"
+                android:id="@+id/productDescriptionEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -315,7 +308,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productInfo"
+                android:id="@+id/productMoreInfoEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -339,7 +332,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productIngredients"
+                android:id="@+id/productIngredientsEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -363,7 +356,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productUse"
+                android:id="@+id/productHowToUseEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -387,7 +380,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/ShippingInfo"
+                android:id="@+id/productShippingEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -421,7 +414,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/productQuantity"
+                android:id="@+id/brandNameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -444,32 +437,46 @@
                 android:textStyle="bold" />
 
             <FrameLayout
-                android:id="@+id/brandImageFrame"
+                android:id="@+id/singleImageFrame"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="5dp">
+                android:layout_margin="12dp"
+                android:background="@drawable/doted_border">
 
-                <!-- This ImageView starts as the '+' icon, and will later show the selected image -->
-                <ImageView
-                    android:id="@+id/addBrandImageBtn"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/singleImageCard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/doted_border"
-                    android:contentDescription="Add Brand Image"
-                    android:scaleType="center"
-                    android:src="@drawable/plus_add_product"
-                    android:visibility="visible" />
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="2dp"
+                    android:visibility="gone"
+                    android:backgroundTint="@android:color/transparent">
+
+                    <ImageView
+                        android:id="@+id/brandImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="visible"/>
+                </androidx.cardview.widget.CardView>
+
 
                 <ImageView
-                    android:id="@+id/deleteBrandImageBtn"
+                    android:id="@+id/singleAddImageIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@drawable/plus_add_product"
+                    android:visibility="visible"/>
+
+                <ImageView
+                    android:id="@+id/deleteSingleImageBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|end"
-                    android:contentDescription="Remove Image"
-                    android:padding="2dp"
+                    android:elevation="4dp"
                     android:src="@drawable/cross_circle"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
             </FrameLayout>
 
             <TextView
@@ -483,7 +490,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/BrandDescription"
+                android:id="@+id/brandDescriptionEditText"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginStart="12dp"
@@ -502,7 +509,7 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/myButtonUpdate"
+                    android:id="@+id/updateButton"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -515,7 +522,7 @@
                     android:textColor="@android:color/white" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/myButtonDelete"
+                    android:id="@+id/deleteButton"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

@@ -62,6 +62,7 @@
             app:cardCornerRadius="20dp">
 
             <ImageView
+                android:id="@+id/editImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

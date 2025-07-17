@@ -52,7 +52,7 @@ public class AddProduct extends Fragment {
     private AppCompatButton btn;
     private String productId, category, productName, productQuantity, stock, price, description,
             moreInfo, ingredients, howToUse, shippingInfo, brandName, brandDescription;
-    private List<String> productImageUris = new ArrayList<>();
+    private List<Object> productImageUris = new ArrayList<>();
     private String brandImageUri;
 
     @Override
@@ -68,7 +68,6 @@ public class AddProduct extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_product, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -79,7 +78,6 @@ public class AddProduct extends Fragment {
         addClickListener();
         setupEditTextListeners();
     }
-
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerViewImages);
         singleImageFrame = view.findViewById(R.id.singleImageFrame);
@@ -114,7 +112,6 @@ public class AddProduct extends Fragment {
         db = FirebaseFirestore.getInstance();
         btn = view.findViewById(R.id.addButton);
     }
-
     private void uploadImageToCloudinary(Uri imageUri, OnImageUploadedCallback callback) {
         MediaManager.get().upload(imageUri)
                 .option("folder", "glamessence")
@@ -141,12 +138,10 @@ public class AddProduct extends Fragment {
                 })
                 .dispatch();
     }
-
     interface OnImageUploadedCallback {
         void onSuccess(String url);
         void onFailure(String error);
     }
-
     private void generateAndSetProductIdAndCategory() {
         db.collection("product_list")
                 .get()
@@ -159,11 +154,10 @@ public class AddProduct extends Fragment {
                     Toast.makeText(requireContext(), "Failed to generate ID: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-
     private void setupMultipleImagePicker() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
-        adapter = new ImageAdapter(imageUris, new ImageAdapter.OnImageActionListener() {
+        adapter = new ImageAdapter(productImageUris, new ImageAdapter.OnImageActionListener() {
             @Override
             public void onAddImageClicked() {
                 if (imageUris.size() >= 5) {
@@ -190,12 +184,11 @@ public class AddProduct extends Fragment {
                     if (uri != null) {
                         imageUris.add(uri);
                         adapter.notifyDataSetChanged();
-                        recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
+                        recyclerView.smoothScrollToPosition(imageUris.size() - 1);
                         updateProgressBar();
                     }
                 });
     }
-
     private void setupSingleImagePicker() {
         singleImagePicker = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
@@ -228,7 +221,6 @@ public class AddProduct extends Fragment {
             updateProgressBar();
         });
     }
-
     private void setupEditTextListeners() {
         SimpleTextWatcher watcher = new SimpleTextWatcher() {
             @Override
@@ -248,7 +240,6 @@ public class AddProduct extends Fragment {
         brandNameEditText.addTextChangedListener(watcher);
         brandDescriptionEditText.addTextChangedListener(watcher);
     }
-
     private void updateProgressBar() {
         int totalFields = 13;
         int filledCount = 0;
@@ -289,7 +280,6 @@ public class AddProduct extends Fragment {
         int progress = (filledCount * 100) / totalFields;
         circularProgressIndicator.setProgress(progress);
     }
-
     private boolean validateFields() {
         updateProgressBar();
         if (circularProgressIndicator.getProgress() < 100) {
@@ -298,7 +288,6 @@ public class AddProduct extends Fragment {
         }
         return true;
     }
-
     private void uploadProductImagesSequentially(List<Uri> imageUris, List<String> uploadedUrls, Runnable onComplete) {
         if (imageUris.isEmpty()) {
             onComplete.run();
@@ -318,10 +307,9 @@ public class AddProduct extends Fragment {
             }
         });
     }
-
     private void uploadAllImagesAndSaveToFirestore() {
         List<String> uploadedProductImageUrls = new ArrayList<>();
-        List<Uri> productImageUris = new ArrayList<>(imageUris);  // Your 5 images list
+        List<Uri> productImageUris = new ArrayList<>(imageUris);
         Uri brandImageUri = selectedSingleImageUri;
 
         uploadProductImagesSequentially(productImageUris, uploadedProductImageUrls, () -> {
@@ -330,7 +318,6 @@ public class AddProduct extends Fragment {
                 public void onSuccess(String brandImageUrl) {
                     saveToFirestore(uploadedProductImageUrls, brandImageUrl);
                 }
-
                 @Override
                 public void onFailure(String error) {
                     Toast.makeText(requireContext(), "Brand Image Upload Failed: " + error, Toast.LENGTH_SHORT).show();
@@ -338,7 +325,6 @@ public class AddProduct extends Fragment {
             });
         });
     }
-
     private void saveToFirestore(List<String> productImageUrls, String brandImageUrl) {
         int productId = Integer.parseInt(productIdEditText.getText().toString().trim());
         Map<String, Object> productData = new HashMap<>();
@@ -369,7 +355,6 @@ public class AddProduct extends Fragment {
                     Toast.makeText(requireContext(), "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
-
     private void navigateToProductList() {
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
@@ -377,7 +362,6 @@ public class AddProduct extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
-
     private void addClickListener() {
         btn.setOnClickListener(view -> {
             if (validateFields()) {
