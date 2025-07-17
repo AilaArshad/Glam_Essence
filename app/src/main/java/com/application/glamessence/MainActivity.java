@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
             case "bag":
                 selectedFragment = new ProductDetail();
                 break;
-//            case "heart":
-//                selectedFragment = new FavoritesFragment(); // Or null for now
-//                break;
+            case "heart":
+                selectedFragment = new ProductList(); // Or null for now
+                break;
 //            case "person":
 //                selectedFragment = new ProfileFragment(); // Or null
 //                break;
