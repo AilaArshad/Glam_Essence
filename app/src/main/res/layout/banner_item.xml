@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- Banner Image -->
+    <ImageView
+        android:id="@+id/bannerImage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:scaleType="centerCrop"
+        android:src="@drawable/lipstick08" />
+
+    <!-- Colored Section -->
+    <LinearLayout
+        android:id="@+id/bannerColorSection"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:background="#A0D6B4"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/bannerTextTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NOVAGE+ SERUMS UP TO 40% OFF"
+            android:textColor="#333"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/bannerTextBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Find your hero serum"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/bannerButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TAKE YOUR PICK"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button" />
+    </LinearLayout>
+</LinearLayout>

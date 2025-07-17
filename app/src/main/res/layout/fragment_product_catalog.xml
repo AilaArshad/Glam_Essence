@@ -73,6 +73,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/nutritionViewAll"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -86,6 +87,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/nutritionAddItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -99,6 +101,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/nutritionEditItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -147,6 +150,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/skincareViewAll"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -160,6 +164,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/skincareAddItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -173,6 +178,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/skincareEditItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -222,6 +228,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/makeupViewAll"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -235,6 +242,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/makeupAddItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -248,6 +256,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/makeupEditItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -296,6 +305,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/fragranceViewAll"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -309,6 +319,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/fragranceAddItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -322,6 +333,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/fragranceEditItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -371,6 +383,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/bathViewAll"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -384,6 +397,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/bathAddItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -397,6 +411,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/bathEditItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -446,6 +461,7 @@
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/hairViewAll"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -459,6 +475,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/hairAddItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"
@@ -472,6 +489,7 @@
                     android:background="#DED8D8" />
 
                 <TextView
+                    android:id="@+id/hairEditItem"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:padding="12dp"

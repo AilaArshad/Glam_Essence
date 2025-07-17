@@ -42,6 +42,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation ("com.cloudinary:cloudinary-android:2.3.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
