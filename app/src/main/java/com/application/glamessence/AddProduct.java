@@ -24,9 +24,12 @@ import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +38,7 @@ import java.util.Map;
 public class AddProduct extends Fragment {
     private RecyclerView recyclerView;
     private FrameLayout singleImageFrame;
-    private ImageView singleSelectedImageView, singleAddImageIcon, deleteSingleImageBtn;
+    private ImageView singleSelectedImageView, singleAddImageIcon, deleteSingleImageBtn, backBtn;
     private CardView cardView;
     private ImageAdapter adapter;
     private final List<Uri> imageUris = new ArrayList<>();
@@ -68,6 +71,7 @@ public class AddProduct extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_product, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -78,6 +82,7 @@ public class AddProduct extends Fragment {
         addClickListener();
         setupEditTextListeners();
     }
+
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.recyclerViewImages);
         singleImageFrame = view.findViewById(R.id.singleImageFrame);
@@ -85,6 +90,7 @@ public class AddProduct extends Fragment {
         singleAddImageIcon = view.findViewById(R.id.singleAddImageIcon);
         deleteSingleImageBtn = view.findViewById(R.id.deleteSingleImageBtn);
         cardView = view.findViewById(R.id.singleImageCard);
+        backBtn = view.findViewById(R.id.back);
 
         cardView.setVisibility(View.GONE);
         singleSelectedImageView.setVisibility(View.GONE);
@@ -112,15 +118,18 @@ public class AddProduct extends Fragment {
         db = FirebaseFirestore.getInstance();
         btn = view.findViewById(R.id.addButton);
     }
+
     private void uploadImageToCloudinary(Uri imageUri, OnImageUploadedCallback callback) {
         MediaManager.get().upload(imageUri)
                 .option("folder", "glamessence")
                 .callback(new UploadCallback() {
                     @Override
-                    public void onStart(String requestId) { }
+                    public void onStart(String requestId) {
+                    }
 
                     @Override
-                    public void onProgress(String requestId, long bytes, long totalBytes) { }
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                    }
 
                     @Override
                     public void onSuccess(String requestId, Map resultData) {
@@ -134,19 +143,38 @@ public class AddProduct extends Fragment {
                     }
 
                     @Override
-                    public void onReschedule(String requestId, ErrorInfo error) { }
+                    public void onReschedule(String requestId, ErrorInfo error) {
+                    }
                 })
                 .dispatch();
     }
+
     interface OnImageUploadedCallback {
         void onSuccess(String url);
+
         void onFailure(String error);
     }
+
     private void generateAndSetProductIdAndCategory() {
         db.collection("product_list")
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
-                    int nextId = querySnapshot.size() + 1;
+                    int maxId = 0;
+
+                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                        String idStr = doc.getString("productId");
+                        if (idStr != null) {
+                            try {
+                                int id = Integer.parseInt(idStr);
+                                if (id > maxId) {
+                                    maxId = id;
+                                }
+                            } catch (NumberFormatException ignored) {
+                            }
+                        }
+                    }
+
+                    int nextId = maxId + 1;
                     productIdEditText.setText(String.valueOf(nextId));
                     categoryEditText.setText(categoryFromIntent);
                 })
@@ -154,6 +182,7 @@ public class AddProduct extends Fragment {
                     Toast.makeText(requireContext(), "Failed to generate ID: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
     private void setupMultipleImagePicker() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -189,6 +218,7 @@ public class AddProduct extends Fragment {
                     }
                 });
     }
+
     private void setupSingleImagePicker() {
         singleImagePicker = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
@@ -221,6 +251,7 @@ public class AddProduct extends Fragment {
             updateProgressBar();
         });
     }
+
     private void setupEditTextListeners() {
         SimpleTextWatcher watcher = new SimpleTextWatcher() {
             @Override
@@ -240,6 +271,7 @@ public class AddProduct extends Fragment {
         brandNameEditText.addTextChangedListener(watcher);
         brandDescriptionEditText.addTextChangedListener(watcher);
     }
+
     private void updateProgressBar() {
         int totalFields = 13;
         int filledCount = 0;
@@ -280,6 +312,7 @@ public class AddProduct extends Fragment {
         int progress = (filledCount * 100) / totalFields;
         circularProgressIndicator.setProgress(progress);
     }
+
     private boolean validateFields() {
         updateProgressBar();
         if (circularProgressIndicator.getProgress() < 100) {
@@ -288,6 +321,7 @@ public class AddProduct extends Fragment {
         }
         return true;
     }
+
     private void uploadProductImagesSequentially(List<Uri> imageUris, List<String> uploadedUrls, Runnable onComplete) {
         if (imageUris.isEmpty()) {
             onComplete.run();
@@ -307,6 +341,7 @@ public class AddProduct extends Fragment {
             }
         });
     }
+
     private void uploadAllImagesAndSaveToFirestore() {
         List<String> uploadedProductImageUrls = new ArrayList<>();
         List<Uri> productImageUris = new ArrayList<>(imageUris);
@@ -318,6 +353,7 @@ public class AddProduct extends Fragment {
                 public void onSuccess(String brandImageUrl) {
                     saveToFirestore(uploadedProductImageUrls, brandImageUrl);
                 }
+
                 @Override
                 public void onFailure(String error) {
                     Toast.makeText(requireContext(), "Brand Image Upload Failed: " + error, Toast.LENGTH_SHORT).show();
@@ -325,28 +361,55 @@ public class AddProduct extends Fragment {
             });
         });
     }
+
     private void saveToFirestore(List<String> productImageUrls, String brandImageUrl) {
         int productId = Integer.parseInt(productIdEditText.getText().toString().trim());
-        Map<String, Object> productData = new HashMap<>();
-        productData.put("productId", String.valueOf(productId));
-        productData.put("category", categoryEditText.getText().toString().trim());
-        productData.put("productName", productNameEditText.getText().toString().trim());
-        productData.put("productQuantity", productQuantityEditText.getText().toString().trim());
-        productData.put("stock", productStockEditText.getText().toString().trim());
-        productData.put("price", productPriceEditText.getText().toString().trim());
-        productData.put("description", productDescriptionEditText.getText().toString().trim());
-        productData.put("moreInfo", productMoreInfoEditText.getText().toString().trim());
-        productData.put("ingredients", productIngredientsEditText.getText().toString().trim());
-        productData.put("howToUse", productHowToUseEditText.getText().toString().trim());
-        productData.put("shippingInfo", productShippingInfoEditText.getText().toString().trim());
-        productData.put("brandName", brandNameEditText.getText().toString().trim());
-        productData.put("brandImageUri", brandImageUrl);
-        productData.put("brandDescription", brandDescriptionEditText.getText().toString().trim());
-        productData.put("productImages", productImageUrls);
+        String category = categoryEditText.getText().toString().trim();
+        String productName = productNameEditText.getText().toString().trim();
+        int quantity = Integer.parseInt(productQuantityEditText.getText().toString().trim());
+        int stock = Integer.parseInt(productStockEditText.getText().toString().trim());
+        float price = Float.parseFloat(productPriceEditText.getText().toString().trim());
+        String description = productDescriptionEditText.getText().toString().trim();
+        String moreInfo = productMoreInfoEditText.getText().toString().trim();
+        String ingredients = productIngredientsEditText.getText().toString().trim();
+        String howToUse = productHowToUseEditText.getText().toString().trim();
+        String shippingInfo = productShippingInfoEditText.getText().toString().trim();
+        String brandName = brandNameEditText.getText().toString().trim();
+        String brandDescription = brandDescriptionEditText.getText().toString().trim();
+        float rating = 0f;
+        int ratingCount = 0;
+        Date createdAt = new Date();
+        Date updatedAt = null;
+        boolean isVisible = true;
+        String tagName = determineTagName(createdAt, stock, rating, ratingCount);
+
+        Product product = new Product(
+                String.valueOf(productId),
+                category,
+                productName,
+                quantity,
+                stock,
+                price,
+                description,
+                moreInfo,
+                ingredients,
+                howToUse,
+                shippingInfo,
+                brandName,
+                brandImageUrl,
+                brandDescription,
+                productImageUrls,
+                tagName,
+                rating,
+                ratingCount,
+                createdAt,
+                updatedAt,
+                isVisible
+        );
 
         db.collection("product_list")
                 .document(String.valueOf(productId))
-                .set(productData)
+                .set(product)
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(requireContext(), "Product Saved Successfully!", Toast.LENGTH_SHORT).show();
                     navigateToProductList();
@@ -355,6 +418,7 @@ public class AddProduct extends Fragment {
                     Toast.makeText(requireContext(), "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
     private void navigateToProductList() {
         Fragment listFragment = new ListToChangeProductInfo();
         Bundle bundle = new Bundle();
@@ -367,11 +431,39 @@ public class AddProduct extends Fragment {
                 .commit();
 
     }
+
     private void addClickListener() {
         btn.setOnClickListener(view -> {
             if (validateFields()) {
                 uploadAllImagesAndSaveToFirestore();
             }
         });
+
+        backBtn.setOnClickListener(view -> {
+            requireActivity().getSupportFragmentManager().popBackStack();
+        });
     }
+
+    private String determineTagName(Date createdAt, int stock, float rating, int ratingCount) {
+        long millisIn7Days = 7L * 24 * 60 * 60 * 1000;
+        long now = System.currentTimeMillis();
+        String tag = "NEW";
+        if (now - createdAt.getTime() <= millisIn7Days) {
+            tag = "NEW";
+        }
+        if (stock < 10) {
+            tag = "LIMITED";
+        }
+        if (stock < 20 && ratingCount > 50) {
+            tag = "HOT PRODUCT";
+        }
+        if (rating >= 4.5) {
+            tag = "TOPRATED";
+        }
+        if (ratingCount >= 100) {
+            tag = "TRENDING";
+        }
+        return tag;
+    }
+
 }

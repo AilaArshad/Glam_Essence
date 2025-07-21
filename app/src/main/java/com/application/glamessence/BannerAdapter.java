@@ -1,5 +1,8 @@
 package com.application.glamessence;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +13,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerViewHolder> {
-    private final List<Integer> banners;
-    private final List<String> topTexts;
-    private final List<String> bottomTexts;
-    private final List<String> buttons;
-    private final List<Integer> bgColors; // ✅ New
 
-    public BannerAdapter(List<Integer> banners, List<String> topTexts, List<String> bottomTexts, List<String> buttons, List<Integer> bgColors) {
+    private final List<DashboardProduct> banners;
+    private final Context context;
+
+    private final List<Integer> pastelColors = Arrays.asList(
+            Color.parseColor("#FFF9C4"), // Soft Yellow
+            Color.parseColor("#E1F5FE"), // Light Blue
+            Color.parseColor("#F8BBD0"), // Light Pink
+            Color.parseColor("#DCEDC8"), // Light Green
+            Color.parseColor("#FFECB3"), // Light Orange
+            Color.parseColor("#D1C4E9")  // Light Purple
+    );
+
+    public BannerAdapter(List<DashboardProduct> banners, Context context) {
         this.banners = banners;
-        this.topTexts = topTexts;
-        this.bottomTexts = bottomTexts;
-        this.buttons = buttons;
-        this.bgColors = bgColors;
+        this.context = context;
     }
 
     @NonNull
@@ -36,11 +46,35 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
 
     @Override
     public void onBindViewHolder(@NonNull BannerViewHolder holder, int position) {
-        holder.bannerImage.setImageResource(banners.get(position));
-        holder.bannerTextTop.setText(topTexts.get(position));
-        holder.bannerTextBottom.setText(bottomTexts.get(position));
-        holder.bannerButton.setText(buttons.get(position));
-        holder.bannerColorSection.setBackgroundColor(bgColors.get(position)); // ✅ Set background color
+        DashboardProduct product = banners.get(position);
+
+        Glide.with(context)
+                .load(product.getUrl())
+                .into(holder.bannerImage);
+
+        holder.bannerTextTop.setText(product.getSubHeading());
+        holder.bannerTextBottom.setText(product.getProductName());
+        holder.bannerButton.setText("Explore");
+
+        int colorIndex = position % pastelColors.size();
+        holder.bannerColorSection.setBackgroundColor(pastelColors.get(colorIndex));
+
+        holder.bannerButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("category", product.getCategory());
+            bundle.putString("heading", product.getCategory());
+
+            ProductList productListFragment = new ProductList();
+            productListFragment.setArguments(bundle);
+
+            if (context instanceof MainActivity) {
+                ((MainActivity) context).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, productListFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     @Override
@@ -52,7 +86,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         ImageView bannerImage;
         TextView bannerTextTop, bannerTextBottom;
         Button bannerButton;
-        View bannerColorSection; // ✅ Section reference
+        View bannerColorSection;
 
         public BannerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,7 +94,7 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
             bannerTextTop = itemView.findViewById(R.id.bannerTextTop);
             bannerTextBottom = itemView.findViewById(R.id.bannerTextBottom);
             bannerButton = itemView.findViewById(R.id.bannerButton);
-            bannerColorSection = itemView.findViewById(R.id.bannerColorSection); // ✅
+            bannerColorSection = itemView.findViewById(R.id.bannerColorSection);
         }
     }
 }

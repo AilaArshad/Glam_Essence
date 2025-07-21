@@ -1,28 +1,29 @@
 package com.application.glamessence;
 
-import com.bumptech.glide.Glide;
-
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import java.util.List;
-import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-
+import androidx.fragment.app.FragmentManager;
+import com.bumptech.glide.Glide;
+import java.util.List;
 
 public class ProductEditListAdapter extends ArrayAdapter<Product> {
-    public ProductEditListAdapter(@NonNull Context context, List<Product> productList) {
+    private final FragmentManager fragmentManager;
+
+    public ProductEditListAdapter(@NonNull Context context, FragmentManager fragmentManager, List<Product> productList) {
         super(context, 0, productList);
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
     public View getView(int position, View convertView, ViewGroup parent) {
         Product product = getItem(position);
-
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.custom_list_item, parent, false);
@@ -47,14 +48,18 @@ public class ProductEditListAdapter extends ArrayAdapter<Product> {
             Bundle bundle = new Bundle();
             bundle.putString("productId", product.getProductId());
             editProduct.setArguments(bundle);
-
-            ((MainActivity) getContext()).getSupportFragmentManager()
-                    .beginTransaction()
+            fragmentManager.beginTransaction()
                     .replace(R.id.frameLayout, editProduct)
                     .addToBackStack(null)
                     .commit();
         });
 
         return convertView;
+    }
+
+    public void updateList(List<Product> newList) {
+        clear();
+        addAll(newList);
+        notifyDataSetChanged();
     }
 }

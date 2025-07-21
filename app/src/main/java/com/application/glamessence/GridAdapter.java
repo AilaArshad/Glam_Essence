@@ -1,37 +1,35 @@
 package com.application.glamessence;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
-import java.util.HashSet;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import java.util.List;
-import java.util.Set;
 
 public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ProductViewHolder> {
-
     private List<Product> productList;
     private Context context;
+    private boolean isFavoritesScreen;
 
-    private Set<String> favoriteProductIds = new HashSet<>();
-    private Set<String> cartProductIds = new HashSet<>();
-
-
-
-    // Constructor receives the product list from activity/fragment
-    public GridAdapter(List<Product> productList, Context context) {
+    public GridAdapter(List<Product> productList, Context context, boolean isFavoritesScreen) {
         this.productList = productList;
         this.context = context;
+        this.isFavoritesScreen = isFavoritesScreen;
     }
 
-    // ViewHolder class
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
-        ImageView productImage ,favHeart,cartIcon;
+        ImageView productImage, favHeart, cartIcon, tagImage;
         TextView brandName, productName, productPrice, ratingText;
         RatingBar ratingBar;
 
@@ -44,8 +42,8 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ProductViewHol
             ratingBar = itemView.findViewById(R.id.ratingBar);
             ratingText = itemView.findViewById(R.id.ratingText);
             favHeart = itemView.findViewById(R.id.fav_heart);
-            cartIcon= itemView.findViewById(R.id.cart_icon);
-
+            cartIcon = itemView.findViewById(R.id.cart_icon);
+            tagImage = itemView.findViewById(R.id.tagImage);
         }
     }
 
@@ -58,66 +56,153 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ProductViewHol
     @Override
     public void onBindViewHolder(ProductViewHolder holder, int position) {
         Product product = productList.get(position);
+
         if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
             String imageUrl = product.getProductImages().get(0);
-            Glide.with(context)
-                    .load(imageUrl)
-                    .into(holder.productImage);
+            Glide.with(context).load(imageUrl).into(holder.productImage);
         }
-
 
         holder.brandName.setText(product.getBrandName());
         holder.productName.setText(product.getProductName());
-        holder.productPrice.setText(product.getPrice()+"$");
+        holder.productPrice.setText(product.getPrice() + "$");
         holder.ratingBar.setRating(product.getRating());
         holder.ratingText.setText("(" + product.getRatingCount() + ")");
 
-        String productId = product.getProductId();
-
-        if (favoriteProductIds.contains(productId)) {
-            holder.favHeart.setImageResource(R.drawable.red_heart);
-        } else {
-            holder.favHeart.setImageResource(R.drawable.heart_outlined);
-        }
+        boolean isFavorite = FavoritesManager.isFavorite(context, product.getProductId());
+        holder.favHeart.setImageResource(isFavorite ? R.drawable.red_heart : R.drawable.heart_outlined);
 
         holder.favHeart.setOnClickListener(v -> {
-            if (favoriteProductIds.contains(productId)) {
-                favoriteProductIds.remove(productId);
-                holder.favHeart.setImageResource(R.drawable.heart_black);
+            if (FavoritesManager.isFavorite(context, product.getProductId())) {
+                if (isFavoritesScreen) {
+                    showRemoveConfirmation(holder.getAdapterPosition(), product);
+                } else {
+                    FavoritesManager.removeFromFavorites(context, product.getProductId());
+                    holder.favHeart.setImageResource(R.drawable.heart_outlined);
+                    notifyItemChanged(holder.getAdapterPosition());
+                    if (favoriteChangeListener != null) {
+                        favoriteChangeListener.onFavoritesCountChanged(FavoritesManager.getFavorites(context).size());
+                    }
+                }
             } else {
-                favoriteProductIds.add(productId);
+                FavoritesManager.addToFavorites(context, product.getProductId());
                 holder.favHeart.setImageResource(R.drawable.red_heart);
+                notifyItemChanged(holder.getAdapterPosition());
+                if (favoriteChangeListener != null) {
+                    favoriteChangeListener.onFavoritesCountChanged(FavoritesManager.getFavorites(context).size());
+                }
             }
         });
 
+        holder.cartIcon.setImageResource(CartManager.isInCart(context, product.getProductId())
+                ? R.drawable.filled_cart
+                : R.drawable.cart);
 
-        if (cartProductIds.contains(productId)) {
-            holder.cartIcon.setImageResource(R.drawable.filled_cart);
-        } else {
-            holder.cartIcon.setImageResource(R.drawable.cart);
+        holder.cartIcon.setOnClickListener(v -> {
+            String productId = product.getProductId();
+            if (CartManager.isInCart(context, productId)) {
+                CartManager.removeFromCart(context, productId);
+                holder.cartIcon.setImageResource(R.drawable.cart);
+                Toast.makeText(context, "Removed from cart", Toast.LENGTH_SHORT).show();
+            } else {
+                CartManager.addToCart(context, productId, 1);
+                holder.cartIcon.setImageResource(R.drawable.filled_cart);
+                Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
+            }
+            if (cartChangeListener != null) {
+                cartChangeListener.onCartCountChanged(CartManager.getCart(context).size());
+            }
+        });
+
+        holder.tagImage.setVisibility(View.GONE);
+        String tagName = product.getTagName();
+        if (tagName != null) {
+            switch (tagName.toLowerCase()) {
+                case "new":
+                    holder.tagImage.setImageResource(R.drawable.tag_new);
+                    break;
+                case "hot product":
+                    holder.tagImage.setImageResource(R.drawable.tag_hot);
+                    break;
+                case "toprated":
+                    holder.tagImage.setImageResource(R.drawable.tag_top_rated);
+                    break;
+                case "trending":
+                    holder.tagImage.setImageResource(R.drawable.tag_trending);
+                    break;
+                case "limited":
+                    holder.tagImage.setImageResource(R.drawable.tag_limited);
+                    break;
+                default:
+                    holder.tagImage.setVisibility(View.GONE);
+                    return;
+            }
+            holder.tagImage.setVisibility(View.VISIBLE);
         }
 
-// Toggle cart icon on click
-        holder.cartIcon.setOnClickListener(v -> {
-            String currentProductId = product.getProductId(); // Must re-fetch it inside listener
-            if (cartProductIds.contains(currentProductId)) {
-                cartProductIds.remove(currentProductId);
-                holder.cartIcon.setImageResource(R.drawable.cart);
+        Bundle bundle = new Bundle();
+        bundle.putString("productId", product.getProductId());
+        holder.itemView.setOnClickListener(v -> {
+            ProductDetail productDetailFragment = new ProductDetail();
+            productDetailFragment.setArguments(bundle);
+            if (context instanceof MainActivity) {
+                ((MainActivity) context).getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frameLayout, productDetailFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+    }
+
+    public interface OnFavoriteChangeListener {
+        void onFavoritesCountChanged(int count);
+    }
+
+    private OnFavoriteChangeListener favoriteChangeListener;
+
+    public void setOnFavoriteChangeListener(OnFavoriteChangeListener listener) {
+        this.favoriteChangeListener = listener;
+    }
+
+    public interface OnCartChangeListener {
+        void onCartCountChanged(int count);
+    }
+
+    private OnCartChangeListener cartChangeListener;
+
+    public void setOnCartChangeListener(OnCartChangeListener listener) {
+        this.cartChangeListener = listener;
+    }
+
+    private void showRemoveConfirmation(int position, Product product) {
+        BottomSheetDialog dialog = new BottomSheetDialog(context);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialogue_remove_favorite, null);
+        dialog.setContentView(view);
+
+        view.findViewById(R.id.yesRemoveBtn).setOnClickListener(v -> {
+            FavoritesManager.removeFromFavorites(context, product.getProductId());
+            dialog.dismiss();
+
+            if (isFavoritesScreen && position != RecyclerView.NO_POSITION) {
+                productList.remove(position);
+                notifyItemRemoved(position);
+                if (favoriteChangeListener != null) {
+                    favoriteChangeListener.onFavoritesCountChanged(productList.size());
+                }
             } else {
-                cartProductIds.add(currentProductId);
-                holder.cartIcon.setImageResource(R.drawable.filled_cart);
+                notifyItemChanged(position);
+                if (favoriteChangeListener != null) {
+                    favoriteChangeListener.onFavoritesCountChanged(FavoritesManager.getFavorites(context).size());
+                }
             }
         });
 
-
+        view.findViewById(R.id.cancelRemoveBtn).setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 
     @Override
     public int getItemCount() {
         return productList != null ? productList.size() : 0;
-    }
-    public void updateList(List<Product> newList) {
-        productList = newList;
-        notifyDataSetChanged();
     }
 }

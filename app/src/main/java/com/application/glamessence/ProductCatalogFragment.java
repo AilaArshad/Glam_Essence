@@ -1,21 +1,15 @@
 package com.application.glamessence;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class ProductCatalogFragment extends Fragment {
-
-    public ProductCatalogFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -27,7 +21,6 @@ public class ProductCatalogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Expandable menus
         setupExpandableMenu(view, R.id.nutritionBlock, R.id.nutritionMenu);
         setupExpandableMenu(view, R.id.skincareBlock, R.id.skincareMenu);
         setupExpandableMenu(view, R.id.makeupBlock, R.id.makeupMenu);
@@ -35,7 +28,6 @@ public class ProductCatalogFragment extends Fragment {
         setupExpandableMenu(view, R.id.bathBlock, R.id.bathMenu);
         setupExpandableMenu(view, R.id.hairBlock, R.id.hairMenu);
 
-        // Add Item clicks
         setupAddItemClick(view, R.id.nutritionAddItem, "Nutrition");
         setupAddItemClick(view, R.id.skincareAddItem, "Skincare");
         setupAddItemClick(view, R.id.makeupAddItem, "Makeup");
@@ -43,7 +35,6 @@ public class ProductCatalogFragment extends Fragment {
         setupAddItemClick(view, R.id.bathAddItem, "Bath and Body");
         setupAddItemClick(view, R.id.hairAddItem, "Hair");
 
-        // Edit Item clicks
         setupEditItemClick(view, R.id.nutritionEditItem, "Nutrition");
         setupEditItemClick(view, R.id.skincareEditItem, "Skincare");
         setupEditItemClick(view, R.id.makeupEditItem, "Makeup");
@@ -51,13 +42,16 @@ public class ProductCatalogFragment extends Fragment {
         setupEditItemClick(view, R.id.bathEditItem, "Bath and Body");
         setupEditItemClick(view, R.id.hairEditItem, "Hair");
 
-        // View All clicks — DO NOTHING for now (disabled)
         setupViewAllClick(view, R.id.nutritionViewAll, "Nutrition");
         setupViewAllClick(view, R.id.skincareViewAll, "Skincare");
         setupViewAllClick(view, R.id.makeupViewAll, "Makeup");
         setupViewAllClick(view, R.id.fragranceViewAll, "Fragrance");
         setupViewAllClick(view, R.id.bathViewAll, "Bath and Body");
         setupViewAllClick(view, R.id.hairViewAll, "Hair");
+
+        TextView searchProductTextView = view.findViewById(R.id.search_product);
+        searchProductTextView.setOnClickListener(v -> openSearchProductFragment());
+
     }
 
     private void setupExpandableMenu(View view, int blockId, int menuId) {
@@ -83,10 +77,9 @@ public class ProductCatalogFragment extends Fragment {
         editItem.setOnClickListener(v -> openEditProductFragment(categoryName));
     }
 
-    // View All handler — currently not used
     private void setupViewAllClick(View view, int viewAllId, String categoryName) {
         TextView viewAll = view.findViewById(viewAllId);
-        viewAll.setOnClickListener(v -> openEditProductFragment(categoryName));
+        viewAll.setOnClickListener(v -> openListProductFragment(categoryName));
     }
 
 
@@ -115,4 +108,27 @@ public class ProductCatalogFragment extends Fragment {
                 .addToBackStack(null)
                 .commit();
     }
+
+    private void openListProductFragment(String category) {
+        ProductList listFragment = new ProductList();
+        Bundle bundle = new Bundle();
+        bundle.putString("category", category);
+        listFragment.setArguments(bundle);
+
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frameLayout, listFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void openSearchProductFragment() {
+        SearchProduct searchProductFragment = new SearchProduct();
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frameLayout, searchProductFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
 }

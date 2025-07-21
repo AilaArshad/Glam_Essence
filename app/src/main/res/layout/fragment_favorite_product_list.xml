@@ -1,0 +1,77 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="16dp">
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/favoriteTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favorites"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:paddingBottom="16dp"/>
+
+    <!-- RecyclerView for Favorites -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favoriteRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
+
+    <!-- Empty State Messages -->
+    <LinearLayout
+        android:id="@+id/emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/emptyMessage"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:text="You have not added any favorites"
+            android:textStyle="bold"
+            android:textSize="23sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/emptySubMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add product here by tapping heart icon on the product images."
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_marginBottom="26dp"
+            android:textColor="#A8A5A5"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/goShoppingButton"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:text="GO SHOPPING"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_black_button"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

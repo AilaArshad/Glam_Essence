@@ -7,7 +7,6 @@
     android:background="@color/white"
     android:padding="12dp">
 
-    <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,17 +17,17 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentStart="true"
-            android:src="@drawable/back_to_previous"
-            android:contentDescription="Back" />
+            android:contentDescription="Back"
+            android:src="@drawable/back_to_previous" />
 
         <TextView
-            android:id="@+id/whats_new_title"
+            android:id="@+id/main_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="WHAT'S NEW"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:fontFamily="@font/mbold" />
     </RelativeLayout>
 
@@ -43,19 +42,21 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <ImageView
-            android:layout_width="20dp"
+            android:layout_width="15dp"
             android:layout_height="20dp"
-            android:layout_marginStart="9dp"
+            android:layout_marginStart="35dp"
             app:srcCompat="@drawable/latest_image"
             android:contentDescription="Latest" />
 
         <TextView
+            android:id="@+id/latest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
             android:text="LATEST"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="#343333"
+            android:textSize="10sp"
+            android:textStyle="bold"
             android:fontFamily="@font/mregular" />
 
         <View
@@ -64,19 +65,21 @@
             android:layout_weight="1" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             app:srcCompat="@drawable/filter_image"
             android:contentDescription="Filter" />
 
         <TextView
+            android:id="@+id/filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="7dp"
-            android:layout_marginRight="9dp"
+            android:layout_marginRight="35dp"
             android:text="FILTER"
-            android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textColor="#343333"
+            android:textSize="10sp"
+            android:textStyle="bold"
             android:fontFamily="@font/mregular" />
     </LinearLayout>
 

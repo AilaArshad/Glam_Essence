@@ -40,20 +40,20 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:foreground="@drawable/ripple_grey_circle"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:focusable="true">
+            android:focusable="true"
+            android:foreground="@drawable/ripple_grey_circle">
 
             <ImageView
                 android:id="@+id/nav_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:src="@drawable/home_white"
                 android:layout_gravity="center"
-                android:contentDescription="Home" />
+                android:clickable="false"
+                android:contentDescription="Home"
+                android:focusable="false"
+                android:src="@drawable/home_white" />
         </FrameLayout>
 
         <FrameLayout
@@ -61,19 +61,20 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:foreground="@drawable/ripple_grey_circle"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:focusable="true">
-        <ImageView
-            android:id="@+id/nav_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:layout_gravity="center"
-            android:contentDescription="Search"
-            android:src="@drawable/search_white" />
+            android:focusable="true"
+            android:foreground="@drawable/ripple_grey_circle">
+
+            <ImageView
+                android:id="@+id/nav_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:contentDescription="Search"
+                android:focusable="false"
+                android:src="@drawable/search_white" />
         </FrameLayout>
 
         <FrameLayout
@@ -81,20 +82,37 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:foreground="@drawable/ripple_grey_circle"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:focusable="true">
-        <ImageView
-            android:id="@+id/nav_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:layout_gravity="center"
-            android:contentDescription="Search"
-            android:src="@drawable/bag_white" />
+            android:focusable="true"
+            android:foreground="@drawable/ripple_grey_circle">
+
+            <ImageView
+                android:id="@+id/nav_cart"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:contentDescription="Cart"
+                android:focusable="false"
+                android:src="@drawable/bag_white"
+                android:scaleType="centerInside"/>
+
+            <TextView
+                android:id="@+id/cart_badge"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center"
+                android:translationX="8dp"
+                android:translationY="-8dp"
+                android:background="@drawable/badge_background"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:textSize="7sp"
+                android:visibility="gone"/>
         </FrameLayout>
+
 
         <FrameLayout
             android:id="@+id/nav_heart_layout"
@@ -105,34 +123,32 @@
             android:background="@android:color/transparent"
             android:clickable="true"
             android:focusable="true">
-        <ImageView
-            android:id="@+id/nav_heart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:layout_gravity="center"
-            android:contentDescription="Search"
-            android:src="@drawable/heart_white" />
-        </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/nav_person_layout"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:foreground="@drawable/ripple_grey_circle"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true">
-        <ImageView
-            android:id="@+id/nav_person"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false"
-            android:layout_gravity="center"
-            android:contentDescription="Search"
-            android:src="@drawable/person_white" />
+            <ImageView
+                android:id="@+id/nav_heart"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/heart_white"
+                android:scaleType="centerInside"
+                android:contentDescription="Favorite"
+                android:clickable="false"
+                android:focusable="false" />
+
+            <TextView
+                android:id="@+id/heart_badge"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center"
+                android:paddingStart="1dp"
+                android:translationX="8dp"
+                android:translationY="-8dp"
+                android:background="@drawable/badge_background"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@android:color/white"
+                android:textSize="6sp"
+                android:visibility="gone"/>
         </FrameLayout>
 
     </LinearLayout>

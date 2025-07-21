@@ -39,12 +39,12 @@ public class EditProduct extends Fragment {
     private EditText brandNameEditText, brandDescriptionEditText;
     private CardView cardView;
     private CircularProgressIndicator circularProgressIndicator;
-    private ImageView brandImageView, addImageView, deleteImageView;
+    private ImageView brandImageView, addImageView, deleteImageView, backBtn;
     private RecyclerView recyclerView;
     private AppCompatButton updateBtn, deleteBtn;
-
+    private float existingRating = 0f;
+    private int existingRatingCount = 0;
     private FirebaseFirestore db;
-
     private ActivityResultLauncher<String> pickImageLauncher;
     private ActivityResultLauncher<String> pickBrandImageLauncher;
 
@@ -55,6 +55,7 @@ public class EditProduct extends Fragment {
     private ImageAdapter adapter;
     private final List<Object> productImageUris = new ArrayList<>();
     private final List<String> existingImageUrls = new ArrayList<>();
+    private String categoryFromIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class EditProduct extends Fragment {
         deleteImageView = view.findViewById(R.id.deleteSingleImageBtn);
         updateBtn = view.findViewById(R.id.updateButton);
         deleteBtn = view.findViewById(R.id.deleteButton);
+        backBtn = view.findViewById(R.id.back);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new ImageAdapter(productImageUris, null);
@@ -108,6 +110,7 @@ public class EditProduct extends Fragment {
         setupEditTextListeners();
         updateBtn.setOnClickListener(v -> onUpdateButtonClicked());
         deleteBtn.setOnClickListener(v -> onDeleteButtonClicked());
+        backBtn.setOnClickListener(view -> requireActivity().getSupportFragmentManager().popBackStack());
     }
 
     private void setupMultipleImagePicker() {
@@ -191,12 +194,27 @@ public class EditProduct extends Fragment {
             Toast.makeText(requireContext(), "Product not found!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        categoryFromIntent = snapshot.getString("category");
         productIdEditText.setText(documentId);
-        categoryEditText.setText(snapshot.getString("category"));
+        categoryEditText.setText(categoryFromIntent);
         productNameEditText.setText(snapshot.getString("productName"));
-        productQuantityEditText.setText(snapshot.getString("productQuantity"));
-        productStockEditText.setText(snapshot.getString("stock"));
-        productPriceEditText.setText(snapshot.getString("price"));
+
+        Number quantityNumber = (Number) snapshot.get("productQuantity");
+        if (quantityNumber != null) {
+            productQuantityEditText.setText(String.valueOf(quantityNumber.intValue()));
+        }
+
+        Number stockNumber = (Number) snapshot.get("stock");
+        if (stockNumber != null) {
+            productStockEditText.setText(String.valueOf(stockNumber.intValue()));
+        }
+
+        Number priceNumber = (Number) snapshot.get("price");
+        if (priceNumber != null) {
+            productPriceEditText.setText(String.valueOf(priceNumber.floatValue()));
+        }
+
         productDescriptionEditText.setText(snapshot.getString("description"));
         productMoreInfoEditText.setText(snapshot.getString("moreInfo"));
         productIngredientsEditText.setText(snapshot.getString("ingredients"));
@@ -205,12 +223,24 @@ public class EditProduct extends Fragment {
         brandNameEditText.setText(snapshot.getString("brandName"));
         brandDescriptionEditText.setText(snapshot.getString("brandDescription"));
 
-        brandImageUrl = snapshot.getString("brandImageUri");
+        Number ratingNumber = (Number) snapshot.get("rating");
+        if (ratingNumber != null) {
+            existingRating = ratingNumber.floatValue();
+        }
+
+        Number ratingCountNumber = (Number) snapshot.get("ratingCount");
+        if (ratingCountNumber != null) {
+            existingRatingCount = ratingCountNumber.intValue();
+        }
+
+        brandImageUrl = snapshot.getString("brandImageUrl");
         if (brandImageUrl != null && !brandImageUrl.isEmpty()) {
             cardView.setVisibility(View.VISIBLE);
             addImageView.setVisibility(View.GONE);
             deleteImageView.setVisibility(View.VISIBLE);
-            Glide.with(this).load(brandImageUrl).into(brandImageView);
+            Glide.with(requireContext())
+                    .load(brandImageUrl)
+                    .into(brandImageView);
         }
         List<String> imageUrls = (List<String>) snapshot.get("productImages");
         if (imageUrls != null) {
@@ -220,9 +250,9 @@ public class EditProduct extends Fragment {
             productImageUris.addAll(imageUrls);
             adapter.notifyDataSetChanged();
         }
+
         updateProgressBar();
     }
-
     private void setupEditTextListeners() {
         SimpleTextWatcher watcher = new SimpleTextWatcher() {
             @Override
@@ -363,33 +393,68 @@ public class EditProduct extends Fragment {
     }
 
     private void updateFirestore(List<String> productImageUrls, String brandImageFinalUrl) {
+        String category = categoryEditText.getText().toString().trim();
+        String productName = productNameEditText.getText().toString().trim();
+        int productQuantity = parseIntSafely(productQuantityEditText.getText().toString().trim());
+        int stock = parseIntSafely(productStockEditText.getText().toString().trim());
+        float price = parseFloatSafely(productPriceEditText.getText().toString().trim());
+        String description = productDescriptionEditText.getText().toString().trim();
+        String moreInfo = productMoreInfoEditText.getText().toString().trim();
+        String ingredients = productIngredientsEditText.getText().toString().trim();
+        String howToUse = productHowToUseEditText.getText().toString().trim();
+        String shippingInfo = productShippingInfoEditText.getText().toString().trim();
+        String brandName = brandNameEditText.getText().toString().trim();
+        String brandDescription = brandDescriptionEditText.getText().toString().trim();
+
+        float rating = existingRating;
+        int ratingCount = existingRatingCount;
+
+        String tagName = getTagForProduct(rating, ratingCount, stock);
+
         Map<String, Object> updatedData = new HashMap<>();
-        updatedData.put("category", categoryEditText.getText().toString().trim());
-        updatedData.put("productName", productNameEditText.getText().toString().trim());
-        updatedData.put("productQuantity", productQuantityEditText.getText().toString().trim());
-        updatedData.put("stock", productStockEditText.getText().toString().trim());
-        updatedData.put("price", productPriceEditText.getText().toString().trim());
-        updatedData.put("description", productDescriptionEditText.getText().toString().trim());
-        updatedData.put("moreInfo", productMoreInfoEditText.getText().toString().trim());
-        updatedData.put("ingredients", productIngredientsEditText.getText().toString().trim());
-        updatedData.put("howToUse", productHowToUseEditText.getText().toString().trim());
-        updatedData.put("shippingInfo", productShippingInfoEditText.getText().toString().trim());
-        updatedData.put("brandName", brandNameEditText.getText().toString().trim());
-        updatedData.put("brandDescription", brandDescriptionEditText.getText().toString().trim());
+        updatedData.put("category", category);
+        updatedData.put("productName", productName);
+        updatedData.put("productQuantity", productQuantity);
+        updatedData.put("stock", stock);
+        updatedData.put("price", price);
+        updatedData.put("description", description);
+        updatedData.put("moreInfo", moreInfo);
+        updatedData.put("ingredients", ingredients);
+        updatedData.put("howToUse", howToUse);
+        updatedData.put("shippingInfo", shippingInfo);
+        updatedData.put("brandName", brandName);
+        updatedData.put("brandDescription", brandDescription);
         updatedData.put("productImages", productImageUrls);
         updatedData.put("brandImageUri", brandImageFinalUrl);
+        updatedData.put("tagName", tagName);
+        updatedData.put("rating", rating);
+        updatedData.put("ratingCount", ratingCount);
+        updatedData.put("isVisible", true);
+        updatedData.put("updatedAt", com.google.firebase.firestore.FieldValue.serverTimestamp());
 
         db.collection("product_list").document(documentId)
                 .update(updatedData)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(requireContext(), "Product updated successfully.", Toast.LENGTH_SHORT).show();
+                    Fragment listFragment = new ListToChangeProductInfo();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("category", categoryFromIntent);
+                    listFragment.setArguments(bundle);
                     requireActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.frameLayout, new ListToChangeProductInfo())
+                            .replace(R.id.frameLayout, listFragment)
                             .addToBackStack(null)
                             .commit();
                 })
                 .addOnFailureListener(e -> Toast.makeText(requireContext(), "Failed to update product.", Toast.LENGTH_SHORT).show());
+    }
+
+    private String getTagForProduct(float rating, int ratingCount, int stock) {
+        if (stock <= 5) return "Limited";
+        if (rating >= 4.5 && ratingCount > 50) return "TopRated";
+        if (rating >= 3.5 && ratingCount > 100) return "Trending";
+        if (ratingCount > 300) return "Hot Product";
+        return "New";
     }
 
     private void onDeleteButtonClicked() {
@@ -402,9 +467,13 @@ public class EditProduct extends Fragment {
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(requireContext(), "Product deleted successfully.", Toast.LENGTH_SHORT).show();
+                    Fragment listFragment = new ListToChangeProductInfo();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("category", categoryFromIntent);
+                    listFragment.setArguments(bundle);
                     requireActivity().getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.frameLayout, new ListToChangeProductInfo())
+                            .replace(R.id.frameLayout, listFragment)
                             .addToBackStack(null)
                             .commit();
                 })
@@ -412,4 +481,21 @@ public class EditProduct extends Fragment {
                     Toast.makeText(requireContext(), "Failed to delete product.", Toast.LENGTH_SHORT).show();
                 });
     }
+
+    private int parseIntSafely(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    private float parseFloatSafely(String value) {
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return 0f;
+        }
+    }
+
 }

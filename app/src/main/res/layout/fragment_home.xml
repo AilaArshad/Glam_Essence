@@ -11,161 +11,238 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Search Bar -->
-        <EditText
-            android:id="@+id/search_product"
+        <TextView
+            android:id="@+id/searchTextView"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/search_border"
             android:drawableStart="@drawable/search_product"
             android:drawablePadding="10dp"
-            android:inputType="text"
-            android:hint="Search Glam Essence"
-            android:textColorHint="@color/black"
+            android:gravity="center_vertical"
             android:paddingStart="20dp"
+            android:text="Search Glam Essence"
             android:textColor="@color/black"
+            android:textColorHint="@color/black"
             android:textSize="15sp" />
 
-        <!-- Auto-sliding Banner -->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/bannerViewPager"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="500dp"
             android:layout_marginTop="12dp" />
 
-        <!-- What's New -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="What's New"
+                android:text="New Arrivals"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="#000000" />
 
-            <TextView
-                android:id="@+id/viewAllNew"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_view_all_new"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View All"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:layout_height="40dp"
+                android:backgroundTint="@null"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:background="@drawable/bg_view_all_btn"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawablePadding="1dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="VIEW ALL"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"/>
         </LinearLayout>
 
-        <!-- What's New Recycler -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/whatsNewRecycler"
+            android:id="@+id/newArrivalsRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
             android:overScrollMode="never"
             android:scrollbars="none"
             android:nestedScrollingEnabled="false" />
 
-        <!-- Promo Banner Section -->
+        <ImageView
+            android:id="@+id/bannerImage"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/lipstick08" />
+
+        <LinearLayout
+            android:id="@+id/bannerColorSection"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            android:background="#A0D6B4"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/bannerTextTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NOVAGE+ SERUMS UP TO 40% OFF"
+                android:textColor="#333"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/bannerTextBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Find your hero serum"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnTrendingBanner"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="SHOP NOW"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_button_home" />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Hot Deals"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_view_all_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="@null"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:background="@drawable/bg_view_all_btn"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawablePadding="1dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="VIEW ALL"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hotDealsRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:nestedScrollingEnabled="false" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
 
             <ImageView
-                android:id="@+id/bannerImage"
+                android:id="@+id/belowHotDealsImage"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/lipstick08" />
 
-            <LinearLayout
-                android:id="@+id/bannerColorSection"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnHotDealsBanner"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="#A0D6B4"
-                android:gravity="center"
-                android:padding="16dp">
+                android:text="SHOP NOW"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_button_home"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="24dp"/>
+        </FrameLayout>
 
-                <TextView
-                    android:id="@+id/bannerTextTop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="NOVAGE+ SERUMS UP TO 40% OFF"
-                    android:textColor="#333"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/bannerTextBottom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Find your hero serum"
-                    android:textColor="#000"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="12dp" />
-
-                <Button
-                    android:id="@+id/bannerButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TAKE YOUR PICK"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/rounded_button" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Best Offers Title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Best Offers"
+                android:text="Top Rated"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="#000000" />
 
-            <TextView
-                android:id="@+id/viewAllOffers"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_view_all_top"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View All"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:layout_height="40dp"
+                android:backgroundTint="@null"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:background="@drawable/bg_view_all_btn"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawablePadding="1dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="VIEW ALL"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"/>
         </LinearLayout>
 
-        <!-- Best Offers Recycler -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/bestOffersRecycler"
+            android:id="@+id/topRatedRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
             android:overScrollMode="never"
             android:scrollbars="none"
             android:nestedScrollingEnabled="false" />
 
-        <!-- Glow Up Motivation Section -->
         <TextView
             android:id="@+id/sectionTitleGlow"
             android:layout_width="match_parent"
@@ -180,17 +257,18 @@
         <TextView
             android:id="@+id/sectionSubTextGlow"
             android:layout_width="match_parent"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="Discover the radiance within you. From skincare to beauty essentials, find everything that empowers your confidence and reflects your inner light."
             android:textSize="15sp"
-            android:textColor="#666666"
-            android:textAlignment="center" />
+            android:gravity="start"
+            android:textColor="#666666" />
 
-        <!-- Image + Shop Now Button -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="320dp"
             android:layout_marginTop="16dp">
 
             <ImageView
@@ -198,56 +276,117 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/lipstick08" />
+                android:src="@drawable/nutri15" />
 
-            <Button
-                android:id="@+id/shopNowGlow"
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnGlowBanner"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="Shop Now"
                 android:layout_marginBottom="24dp"
                 android:layout_gravity="center|bottom"
                 android:textColor="@android:color/white"
-                android:background="@drawable/rounded_button" />
+                android:background="@drawable/rounded_button_home" />
         </FrameLayout>
 
-        <!-- Recommended Products Title -->
+        <!-- Limited Time Picks Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
             android:padding="16dp"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Recommended for You"
+                android:text="Limited Time Picks"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textColor="#000000" />
 
-            <TextView
-                android:id="@+id/viewAllRecommended"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_view_all_limited"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View All"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:layout_height="40dp"
+                android:backgroundTint="@null"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:background="@drawable/bg_view_all_btn"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawablePadding="1dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="VIEW ALL"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"/>
         </LinearLayout>
 
-        <!-- Recommended Products Recycler -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recommendedProductsRecycler"
+            android:id="@+id/limitedTimeRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
             android:overScrollMode="never"
             android:scrollbars="none"
             android:nestedScrollingEnabled="false" />
 
+
+        <!-- Trending Now Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Trending Now"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#000000" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_view_all_trending"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="@null"
+                android:elevation="0dp"
+                android:stateListAnimator="@null"
+                android:background="@drawable/bg_view_all_btn"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:drawablePadding="1dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="VIEW ALL"
+                android:textAllCaps="false"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trendingRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="7dp"
+            android:paddingEnd="7dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:nestedScrollingEnabled="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
     </LinearLayout>
 </ScrollView>

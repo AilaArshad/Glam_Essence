@@ -1,11 +1,14 @@
 package com.application.glamessence;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -13,8 +16,11 @@ import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView navHome, navSearch, navBag, navHeart, navPerson;
-    private FrameLayout frameHome, frameSearch, frameBag, frameHeart, framePerson;
+    private ImageView navHome, navSearch, navBag, navHeart;
+    private FrameLayout frameHome, frameSearch, frameBag, frameHeart;
+    private TextView heartBadge, cartBadge; // Declare these as fields
+    private int favoriteCount = 0;
+    private int cartCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +32,17 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        heartBadge = findViewById(R.id.heart_badge);
+        cartBadge = findViewById(R.id.cart_badge);
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         CloudinaryManager.init(this);
         setupCustomNavbar();
+
+        // ✅ Initialize badges on startup from preferences
+        updateBadge(heartBadge, FavoritesManager.getFavorites(this).size());
+        updateBadge(cartBadge, CartManager.getCart(this).size());
     }
 
     private void setupCustomNavbar() {
@@ -35,24 +50,21 @@ public class MainActivity extends AppCompatActivity {
         navSearch = findViewById(R.id.nav_search);
         navBag = findViewById(R.id.nav_cart);
         navHeart = findViewById(R.id.nav_heart);
-        navPerson = findViewById(R.id.nav_person);
 
         frameHome = findViewById(R.id.nav_home_layout);
         frameSearch = findViewById(R.id.nav_search_layout);
         frameBag = findViewById(R.id.nav_bag_layout);
         frameHeart = findViewById(R.id.nav_heart_layout);
-        framePerson = findViewById(R.id.nav_person_layout);
 
         frameHome.setOnClickListener(v -> setSelectedIcon("home"));
         frameSearch.setOnClickListener(v -> setSelectedIcon("search"));
         frameBag.setOnClickListener(v -> setSelectedIcon("bag"));
         frameHeart.setOnClickListener(v -> setSelectedIcon("heart"));
-        framePerson.setOnClickListener(v -> setSelectedIcon("person"));
 
         setSelectedIcon("home");
     }
 
-    private void setSelectedIcon(String selected) {
+    public void setSelectedIcon(String selected) {
         navHome.setImageResource(
                 selected.equals("home") ? R.drawable.home_black : R.drawable.home_white);
 
@@ -65,34 +77,43 @@ public class MainActivity extends AppCompatActivity {
         navHeart.setImageResource(
                 selected.equals("heart") ? R.drawable.heart_black : R.drawable.heart_white);
 
-        navPerson.setImageResource(
-                selected.equals("person") ? R.drawable.person_black : R.drawable.person_white);
-
         Fragment selectedFragment = null;
-
         switch (selected) {
             case "home":
-                selectedFragment = new AddProduct(); // Replace with your actual HomeFragment
+                selectedFragment = new fragment_home();
                 break;
             case "search":
-                selectedFragment = new ProductCatalogFragment(); // Same here
+                selectedFragment = new ProductCatalogFragment();
                 break;
             case "bag":
-                selectedFragment = new ProductDetail();
+                selectedFragment = new cart_fragment();
                 break;
             case "heart":
-               selectedFragment = new fragment_home(); // Or null for now
-//                break;
-//            case "person":
-//                selectedFragment = new ProfileFragment(); // Or null
-//                break;
+                selectedFragment = new FavoriteProductList();
+                break;
         }
-
         if (selectedFragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frameLayout, selectedFragment)
                     .commit();
+        }
+    }
+
+    public void updateFavoritesBadge(int count) {
+        updateBadge(heartBadge, count);
+    }
+
+    public void updateCartBadge(int count) {
+        updateBadge(cartBadge, count);
+    }
+
+    private void updateBadge(TextView badgeView, int count) {
+        if (count > 0) {
+            badgeView.setText(String.valueOf(count));
+            badgeView.setVisibility(View.VISIBLE);
+        } else {
+            badgeView.setVisibility(View.GONE);
         }
     }
 }
