@@ -43,6 +43,12 @@ public class Checkout extends Fragment {
         btnPlaceOrder.setOnClickListener(v -> {
             if (validateInputs()) {
                 CartManager.clearCart(requireContext());
+
+                // Update cart badge to 0 after clearing
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).updateCartBadge(0);
+                }
+
                 Toast.makeText(requireContext(), "Your order is placed!\nYou will receive details via email.", Toast.LENGTH_LONG).show();
                 ((MainActivity) requireActivity()).setSelectedIcon("home");
             }
