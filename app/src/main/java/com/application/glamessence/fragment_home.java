@@ -82,10 +82,10 @@ public class fragment_home extends Fragment {
                 .setOnClickListener(v -> openProductList(null, "NEW", "New Arrivals"));
 
         view.findViewById(R.id.btn_view_all_hot)
-                .setOnClickListener(v -> openProductList(null, "HOT DEAL", "Hot Deals"));
+                .setOnClickListener(v -> openProductList(null, "HOT PRODUCT", "Hot Deals"));
 
         view.findViewById(R.id.btn_view_all_top)
-                .setOnClickListener(v -> openProductList(null, "TOP RATED", "Top Rated"));
+                .setOnClickListener(v -> openProductList(null, "TOPRATED", "Top Rated"));
 
         view.findViewById(R.id.btn_view_all_limited)
                 .setOnClickListener(v -> openProductList(null, "LIMITED", "Limited Time Picks"));
