@@ -50,23 +50,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser() {
-//        String email = emailField.getText().toString().trim();
-//        String password = passwordField.getText().toString().trim();
-//
-//        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-//            Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        mAuth.signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
+        String email = emailField.getText().toString().trim();
+        String password = passwordField.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please enter both email and password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
                         Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
-//                    } else {
-//                        Toast.makeText(this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                    } else {
+                        Toast.makeText(this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

@@ -25,6 +25,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:paddingTop="150dp"
             android:orientation="vertical">
 
             <TextView
@@ -56,6 +57,7 @@
             android:hint="Email"
             android:background="@drawable/edittext_rounded_white"
             android:padding="10dp"
+            android:inputType="textEmailAddress"
             android:textColor="#FFFFFF"
             android:textColorHint="#AAFFFFFF"
             android:layout_marginBottom="10dp" />
