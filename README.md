@@ -116,5 +116,3 @@ It allows customers to browse products, search efficiently, explore categories, 
 
 
 
-
-Do you want me to add that short pitch?
