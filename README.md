@@ -13,6 +13,7 @@ It provides users with an intuitive shopping experience, enabling seamless produ
 4. [Installation & Setup](#installation--setup)
 5. [Usage Guide](#usage-guide)
 6. [Future Enhancements](#future-enhancements)
+7. [Contributers](#contributers)
 
 ---
 
@@ -113,6 +114,15 @@ It allows customers to browse products, search efficiently, explore categories, 
 * **Secure Payments** – Integration with payment gateways.
 * **Push Notifications** – Real-time updates for offers and orders.
 * **Advanced Filters & Sorting** – Improved product discovery tools.
+
+---
+
+## 7. Contributors
+This project was developed collaboratively by:
+* Aila Arshad – Your GitHub Profile
+* Ayesha Javed – AYESHAJAVED29
+* Asma Ismail – asmaismail001
+
 
 
 
